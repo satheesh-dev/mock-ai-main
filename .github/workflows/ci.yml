@@ -35,21 +35,21 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: npm install --legacy-peer-deps
 
       - name: Run Linting
-        run: yarn lint
+        run: npm run lint
 
       - name: Run Tests
         env:
           DATABASE_URL: postgres://myuser:mypassword@localhost:5432/mydatabase
-        run: yarn test
+        run: npm test
 
       - name: Build Project
-        run: yarn build
+        run: npm run build
 
   docker:
     needs: build-and-test
@@ -65,7 +65,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Build and Push Docker Image
         run: |
           docker build -t mydockerhub/mock-ai-main:latest .
